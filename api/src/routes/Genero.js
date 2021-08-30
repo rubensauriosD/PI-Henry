@@ -35,12 +35,13 @@ app.get('/', async function(req, res){
                 }
             })
         })
+
+        const all = await Genero.findAll();
+        res.json(all)
     } 
     catch (error) {
         console.log(error);
     }
-
-    res.json(unicos)
 });
 
 module.exports = app;

@@ -2,19 +2,55 @@ const app = require('express').Router();
 const axios = require('axios');
 const {Videogame, Genero} = require('../db')
 const {API_KEY} = process.env;
+const { Op } = require('sequelize');
 
+//========FUNCIONES 
 const juegos = async () => {
-    const response = await axios.get(`https://api.rawg.io/api/games?&key=${API_KEY}&page_size=15`);
+    const response = await axios.get(`https://api.rawg.io/api/games?&key=${API_KEY}&page_size=100`);
     const js = response.data;
     return js;
 }
 
-const juegosparafiltrar = async (name) => {
-    const response = await axios.get(`https://api.rawg.io/api/games?search=${name}&key=${API_KEY}`);
-    const js = response.data;
-    return js;
+const allgames = async () => {
+    var games = await juegos()
+    games = games.results
+
+    let x = Videogame.findAll()
+    if (!x.length) 
+    {
+        games = games.map(g => {
+            if (!g.description) g.description = 'empty';
+    
+            return{
+                name: g.name, 
+                description: g.description,
+                released:g.released,
+                rating:g.rating,
+                platforms:g.platforms
+            }
+        })
+    
+        await Videogame.bulkCreate(games);
+    }
+
+    x = await Videogame.findAll({
+        include: Genero
+    })
+
+    return x;
 }
 
+const gamesname = async (name) => {
+    let res = Videogame.findAll({
+        where:{
+            name:{[Op.substring]: name}
+        }
+    })
+
+    return res;
+}
+
+//========RUTAS
 app.get('/', async function(req, res){
     //aca hago tambien el de ?name solo q validando si lo trae o no
     const {name} = req.query;
@@ -23,26 +59,8 @@ app.get('/', async function(req, res){
     {
         try 
         {
-            
-            const all = await juegos()
-            let games= [...all.results]
-
-            {// all.results.map(async (gam) => {
-            //     const [games, created] = await Videogame.findOrCreate({
-            //         where:{
-            //             nombre : gam.name,
-            //             descripcion: gam.description,
-            //             fechaDeLanzamiento:gam.released,
-            //             rating:gam.rating,
-            //             plataformas: gam.platforms
-            //         },
-            //         attributes: { exclude: ['createdAt' , 'updatedAt']},
-            //         include: Genero
-            //     })
-            // }}
-            }
-            
-            res.json(games)
+            const all = await allgames()
+            res.json(all)
         } 
         catch (error) 
         {
@@ -53,12 +71,11 @@ app.get('/', async function(req, res){
     {
         try 
         {
-            const all = await juegosparafiltrar(name)
-            let games= [...all.results]
-            // const gamesfiltrados = games.filter(g => g.name.toLowerCase().include(name.toLowerCase()))
-            const resultado = games.slice(1,15)
+            const allnames = await gamesname(name)//fijarme como hacer para que ignore las mayus
 
-            res.json(resultado)
+            // const resultado = allnames.slice(1,15)
+
+            res.json(allnames)
         } 
         catch (error) {
             return res.status(404).send('El videojuego que esta intentando buscar no existe.')

@@ -3,46 +3,42 @@ const axios = require('axios');
 const {API_KEY} = process.env;
 const {Videogame, Genero} = require('../db')
 
-const juegos = async (id) => {
-    const response = await axios.get(`https://api.rawg.io/api/games/${id}?key=d0a01e72cc1f4ca5960a25de3434ea0d`);
-    const js = response.data;
-    return js;
-}
-
 app.get('/:idVideogame', async function(req, res){
     const {idVideogame} = req.params;
     
     try 
     {
-        const game = await juegos(idVideogame)
-
-        res.json(game)
+        const gam = await Videogame.findByPk(idVideogame);
+        res.json(gam)
     } 
     catch (error) {
-        res.status(404).send('El id ingresado no es valido')
+        res.status(404).send('Juego no encontrado')
     }
+    
 });
 
+
 app.post('/', async function(req, res){
-    const {nombre, descripcion, rating, fechaDeLanzamiento, plataformas} = req.body;
+    const {name, description, released, rating, platforms, genres}  = req.body;
 
     try 
     {
-        const game = await Videogame.findOrCreate({
-            where:{
-            nombre,
-            descripcion,
-            fechaDeLanzamiento,
-            rating,
-            plataformas,
-            }
+        const game = await Videogame.create({
+            name: name, 
+            description: description,
+            released:released,
+            rating:rating,
+            platforms:platforms     
         })
+
+        await game.setGeneros(genres)//para crear paso el id de genero
+        res.json(game)
     } 
     catch (error) {
         console.log(error);
     }
 
-    res.send('Creado Correctamente')
+    // res.send('Creado Correctamente')
 });
 
 module.exports = app;
