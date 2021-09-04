@@ -7,6 +7,7 @@ const generos = async () => {
     const js = response.data.results;
     return js;
 }
+
 app.get('/', async function(req, res){
 
     const juegos = await generos()
@@ -42,6 +43,19 @@ app.get('/', async function(req, res){
     catch (error) {
         console.log(error);
     }
+});
+
+app.get('/platforms', async function(req, res){
+
+    const juegos = await generos()
+    var gen = [] 
+
+    juegos.map((item) => {
+        item.platforms.map(g => gen.push(g.platform.name))
+    })
+
+    gen = [...new Set(gen)];
+    res.json(gen)
 });
 
 module.exports = app;

@@ -1,6 +1,4 @@
 const app = require('express').Router();
-const axios = require('axios');
-const {API_KEY} = process.env;
 const {Videogame, Genero} = require('../db')
 
 app.get('/:idVideogame', async function(req, res){
@@ -19,7 +17,7 @@ app.get('/:idVideogame', async function(req, res){
 
 
 app.post('/', async function(req, res){
-    const {name, description, released, rating, platforms, genres}  = req.body;
+    const {name, description, released, rating, platforms, genres,image}  = req.body;
 
     try 
     {
@@ -28,7 +26,9 @@ app.post('/', async function(req, res){
             description: description,
             released:released,
             rating:rating,
-            platforms:platforms     
+            platforms:platforms,
+            image:image,
+            gender: genres
         })
 
         await game.setGeneros(genres)//para crear paso el id de genero

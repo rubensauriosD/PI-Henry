@@ -6,7 +6,7 @@ const { Op } = require('sequelize');
 
 //========FUNCIONES 
 const juegos = async () => {
-    const response = await axios.get(`https://api.rawg.io/api/games?&key=${API_KEY}&page_size=100`);
+    const response = await axios.get(`https://api.rawg.io/api/games?&key=${API_KEY}&page_size=20`);
     const js = response.data;
     return js;
 }
@@ -16,21 +16,34 @@ const allgames = async () => {
     games = games.results
 
     let x = Videogame.findAll()
+    
     if (!x.length) 
     {
         games = games.map(g => {
             if (!g.description) g.description = 'empty';
-    
             return{
                 name: g.name, 
                 description: g.description,
                 released:g.released,
                 rating:g.rating,
-                platforms:g.platforms
+                platforms:g.platforms,
+                image:g.background_image,
+                gender:g.genres
             }
         })
-    
-        await Videogame.bulkCreate(games);
+        
+        const setObj = new Set(); 
+
+        const unicos = games.reduce((acumulador, g) =>{
+            if (!setObj.has(g.name)) 
+            {
+                setObj.add(g.name, g)
+                acumulador.push(g)
+            }
+            return acumulador;
+        }, []);
+
+        await Videogame.bulkCreate(unicos);
     }
 
     x = await Videogame.findAll({
