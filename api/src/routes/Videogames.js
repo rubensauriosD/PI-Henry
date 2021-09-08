@@ -6,7 +6,7 @@ const { Op } = require('sequelize');
 
 //========FUNCIONES 
 const juegos = async () => {
-    const response = await axios.get(`https://api.rawg.io/api/games?&key=${API_KEY}&page_size=20`);
+    const response = await axios.get(`https://api.rawg.io/api/games?&key=${API_KEY}&page_size=105`);
     const js = response.data;
     return js;
 }

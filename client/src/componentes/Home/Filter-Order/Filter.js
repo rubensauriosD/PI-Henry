@@ -1,12 +1,13 @@
 import { useSelector, useDispatch} from 'react-redux'
 import {useEffect} from 'react';
 import {getGenders} from '../../../actions/actions'
-import { filter } from './Filter-Order';
+
 import DivStyle from './style'
+import {generico} from '../../../actions/actions'
 
 function Filter() {
     const generos = useSelector(state => state.genders)
-    const games = useSelector(state => state.games)
+    var games = useSelector(state => state.games)
     const existentes = useSelector(state => state.gamesApi)
     const creados = useSelector(state => state.gamesPost)
     const dispatch = useDispatch();
@@ -16,16 +17,30 @@ function Filter() {
         dispatch(getGenders());
     },[])
 
-    function filtered(e) {
-        dispatch(filter(e.target.value, games))
+    function filteredGenros(e) {
+        // dispatch(filter(e.target.value, games))
+        var gen = []
+
+        games.filter((item) => {
+            if (item.gender) {
+                item.gender.forEach(element => {
+                    if (element.name == e.target.value) {
+                        gen.push(item)
+                    }
+                });
+            }
+        })
+
+        games = [...gen]
+        dispatch(generico(games))
     }
 
     function filteredExist(e) {
         if (e.target.value == 'exist') {
-            return existentes;
+            dispatch(generico(existentes))
         }
         else{
-            return creados;
+            dispatch(generico(creados))
         }
     }
 
@@ -36,7 +51,7 @@ function Filter() {
                 <option value="exist">Existing Game</option>
                 <option value="create">Game Created</option>
             </select>
-            <select onChange={filtered}>
+            <select onChange={filteredGenros}>
                 {
                     generos && generos.map((g,id) => {
                         return <option key={id}>

@@ -1,6 +1,16 @@
 const { Videogame, conn } = require('../../src/db.js');
 const { expect } = require('chai');
 
+const videogame = {
+  name: 'Naruto',
+  description: 'game of ninjas with powers',
+  released: "09/09/2009",
+  rating: 10.0,
+  platforms: [],
+  image:"image",
+  gender: [],
+};
+
 describe('Videogame model', () => {
   before(() => conn.authenticate()
     .catch((err) => {
@@ -15,7 +25,7 @@ describe('Videogame model', () => {
           .catch(() => done());
       });
       it('should work when its a valid name', () => {
-        Recipe.create({ name: 'Super Mario Bros' });
+        Videogame.create({ name: 'Super Mario Bros' });
       });
     });
   });

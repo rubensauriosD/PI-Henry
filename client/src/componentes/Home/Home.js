@@ -3,12 +3,9 @@ import Filter from './Filter-Order/Filter'
 import Order from './Filter-Order/Order';
 import DivStyle from './style'
 
-
 function Home() {
     return(
         <DivStyle>
-            <input type='text'/>
-            <button>Search 🔍</button>
             <div className='utils'>   
                 <Filter/>
                 <Order/>

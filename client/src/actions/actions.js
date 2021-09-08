@@ -42,11 +42,34 @@ export function getGenders()
     }
 };
 
+export function generico(games)
+{
+    return function (dispatch)
+    {
+        dispatch({type: 'GENERICO', payload: games})
+    }
+};
+
+export function paginate()
+{
+    return function (dispatch)
+    {
+        dispatch({type: 'PAGINATE'})
+    }
+}; 
+
 //trae el game detail
 export function getVideoGameId(id) {
     return async function (dispatch) {
         const response = await axios.get(`http://localhost:3001/videogame/${id}`);
         dispatch({ type: 'GET_GAME', payload: response.data });
+    }
+}
+
+export function getVideoGameName(name) {
+    return async function (dispatch) {
+        const response = await axios.get(`http://localhost:3001/videogames?name=${name}`);
+        dispatch({ type: 'GET_NAME', payload: response.data });
     }
 }
 

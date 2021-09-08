@@ -28,6 +28,8 @@ img{
 }
 .link{
     text-decoration:none;
+    color:white;
+text-shadow: 2px 2px black;
 }
 `
 
