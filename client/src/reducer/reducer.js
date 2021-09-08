@@ -5,8 +5,8 @@ const initialState = {
     platforms:[],
     gamesApi:[],
     gamesPost:[],
-    gamesPag:[],
-    pag:[]
+    gamesName:[],
+    gamesFilter:[]
 }
 
 function reducer(state = initialState, action) {
@@ -25,11 +25,11 @@ function reducer(state = initialState, action) {
                     ...state,
                     gameDetail: action.payload
                 }
- 
+
         case 'GET_NAME':
                 return{
                     ...state,
-                    games: action.payload
+                    gamesName: action.payload
                 }
 
         case 'GET_GENDERS':
@@ -50,26 +50,17 @@ function reducer(state = initialState, action) {
                     games: action.payload
                 }
 
-        case 'PAGINATE':
-            var p;
-            if (state.pag.length > 4) 
-            {
-                p = state.gamesPag.slice(0,15)
-                state.gamesPag.splice(0,15)
-                return {
+        case 'FILTRADOS':
+                return{
                     ...state,
-                    pag: [...state.pag, p]
-                };
-            }
-            else{
-                p = state.gamesPag.slice(0,15)
-                state.gamesPag.splice(0,15)
-                return {
+                    gamesFilter: action.payload
+                }
+
+        case 'RESET':
+                return{
                     ...state,
-                    pag: p
-                };
-            }
-            
+                    gamesName: action.payload
+                }
     
         default:
             return state;

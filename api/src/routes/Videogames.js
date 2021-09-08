@@ -15,7 +15,7 @@ const allgames = async () => {
     var games = await juegos()
     games = games.results
 
-    let x = Videogame.findAll()
+    let x = await Videogame.findAll()
     
     if (!x.length) 
     {

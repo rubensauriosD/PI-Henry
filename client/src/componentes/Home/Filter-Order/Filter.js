@@ -1,24 +1,21 @@
 import { useSelector, useDispatch} from 'react-redux'
 import {useEffect} from 'react';
-import {getGenders} from '../../../actions/actions'
-
+import {getGenders,generico, filtrados} from '../../../actions/actions'
 import DivStyle from './style'
-import {generico} from '../../../actions/actions'
 
 function Filter() {
     const generos = useSelector(state => state.genders)
     var games = useSelector(state => state.games)
     const existentes = useSelector(state => state.gamesApi)
     const creados = useSelector(state => state.gamesPost)
+    var paraFiltrar = useSelector(state => state.gamesFilter)
     const dispatch = useDispatch();
-
 
     useEffect(() =>{
         dispatch(getGenders());
     },[])
 
     function filteredGenros(e) {
-        // dispatch(filter(e.target.value, games))
         var gen = []
 
         games.filter((item) => {
@@ -31,8 +28,8 @@ function Filter() {
             }
         })
 
-        games = [...gen]
-        dispatch(generico(games))
+        paraFiltrar = [...gen]
+        dispatch(filtrados(paraFiltrar))
     }
 
     function filteredExist(e) {

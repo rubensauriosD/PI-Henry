@@ -11,6 +11,7 @@ function Create() {
         released:'',
         rating:0,
         genres:0,
+        gender:[],
         platforms:[],
         image:''
     })
@@ -37,7 +38,12 @@ function Create() {
 
     function handleGen(e) {
         let x = Number(e.target.value[0]);
+        let y = '';
+        for (let index = 4; index < e.target.value.length; index++) {
+            y = y + e.target.value[index]
+        }
         inputs.genres = x;
+        inputs.gender.push({name:y});
     } 
     
     function handleSubmit(e) {

@@ -1,29 +1,16 @@
 import Card from "./Card/Card";
 import {DivStyle ,DivStyle2} from "./style";
-import {getVideoGames} from '../../../actions/actions'
 import {useDispatch, useSelector} from 'react-redux'
 import { useEffect,useState} from 'react';
-import {generico,paginate,getVideoGameName} from "../../../actions/actions"
+import {getVideoGameName,getVideoGames,filtrados,reset} from "../../../actions/actions"
 
 function Cards() {
     var games = useSelector(state => state.games);
-    // var gPAg = useSelector(state => state.pag);
+    var gamesName = useSelector(state => state.gamesName);
+    var filt = useSelector(state => state.gamesFilter);
     const [name, setName] = useState('');
     const dispatch = useDispatch();
 
-    useEffect(() =>{
-        dispatch(getVideoGames());
-    },[])
-    
-    // useEffect(() =>{
-    //     dispatch(paginate())
-    // },[])
-
-    function handleChange(e) {
-        setName(e.target.value)
-    } 
-
-    
     const [currentPage, setCurrentPage] = useState(1);
     const [gamesXPag] = useState(15);
     const pageNumber = Math.ceil(games.length / gamesXPag);
@@ -41,15 +28,53 @@ function Cards() {
         else setCurrentPage(pageNumber);
     };
 
+    useEffect(() =>{
+        dispatch(getVideoGames());
+    },[])
+
+    function handleChange(e) {
+        setName(e.target.value)
+    } 
+
     return(
         <div>
             <DivStyle2>
                 <input onChange={(e)=> handleChange(e)} type='text'/>
                 <button onClick={()=> dispatch(getVideoGameName(name))}>Search 🔍</button>
-                <button onClick={()=> dispatch(getVideoGames())}>Reset 💾</button>
+                <button onClick={() => {dispatch(filtrados(games));
+                dispatch(reset(games))}}>Reset 💾</button>
             </DivStyle2>
+
             <DivStyle>
             {
+                // bool == true ? currentGames?.map((game,i) => {
+                //     return <Card
+                //     key={i} 
+                //     name={game.name}
+                //     image={game.image}
+                //     genres={game.gender}
+                //     id={game.id}/>
+                // })
+                // :
+                gamesName.length >= 1 ? gamesName.map((game,i) => {
+                    return <Card
+                    key={i} 
+                    name={game.name}
+                    image={game.image}
+                    genres={game.gender}
+                    gender={game.gender}
+                    id={game.id}/>
+                }) 
+                :
+                filt.length >= 1 ? filt.map((game,i) => {
+                    return <Card
+                    key={i} 
+                    name={game.name}
+                    image={game.image}
+                    genres={game.gender}
+                    id={game.id}/>
+                })
+                :
                 currentGames?.map((game,i) => {
                     return <Card
                     key={i} 

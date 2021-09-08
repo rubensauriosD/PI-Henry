@@ -17,10 +17,12 @@ app.get('/:idVideogame', async function(req, res){
 
 
 app.post('/', async function(req, res){
-    const {name, description, released, rating, platforms, genres,image}  = req.body;
+    const {name, description, released, rating, platforms, genres,image, gender}  = req.body;
 
     try 
     {
+        const g = await Genero.findByPk(genres);
+
         const game = await Videogame.create({
             name: name, 
             description: description,
@@ -28,7 +30,7 @@ app.post('/', async function(req, res){
             rating:rating,
             platforms:platforms,
             image:image,
-            gender: genres
+            gender: g
         })
 
         await game.setGeneros(genres)//para crear paso el id de genero

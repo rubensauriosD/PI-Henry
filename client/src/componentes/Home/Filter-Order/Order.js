@@ -72,7 +72,6 @@ function Order()
                 games = [...o]
                 dispatch(generico(games))
                 break;
-            
         }
     }
 

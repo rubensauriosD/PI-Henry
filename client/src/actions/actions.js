@@ -50,13 +50,21 @@ export function generico(games)
     }
 };
 
-export function paginate()
+export function filtrados(games)
 {
     return function (dispatch)
     {
-        dispatch({type: 'PAGINATE'})
+        dispatch({type: 'FILTRADOS', payload: games})
     }
-}; 
+};
+
+export function reset(games)
+{
+    return function (dispatch)
+    {
+        dispatch({type: 'RESET', payload: games})
+    }
+};
 
 //trae el game detail
 export function getVideoGameId(id) {
