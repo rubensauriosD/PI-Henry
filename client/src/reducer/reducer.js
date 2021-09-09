@@ -5,7 +5,7 @@ const initialState = {
     platforms:[],
     gamesApi:[],
     gamesPost:[],
-    gamesName:[],
+    gamesNames:[],
     gamesFilter:[]
 }
 
@@ -29,7 +29,7 @@ function reducer(state = initialState, action) {
         case 'GET_NAME':
                 return{
                     ...state,
-                    gamesName: action.payload
+                    gamesNames: action.payload
                 }
 
         case 'GET_GENDERS':

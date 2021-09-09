@@ -33,11 +33,17 @@ function Filter() {
     }
 
     function filteredExist(e) {
-        if (e.target.value == 'exist') {
-            dispatch(generico(existentes))
+
+        if (e.target.value == 'exist') 
+        {
+            for (let index = 0; index < creados.length; index++) 
+            {
+                existentes.shift()
+            }
+            dispatch(filtrados(existentes))
         }
         else{
-            dispatch(generico(creados))
+            dispatch(filtrados(creados))
         }
     }
 
@@ -57,6 +63,7 @@ function Filter() {
                     })
                 }
             </select>
+            <button onClick={() => dispatch(filtrados(games))}>🔄</button>
         </DivStyle>
     )
 }
