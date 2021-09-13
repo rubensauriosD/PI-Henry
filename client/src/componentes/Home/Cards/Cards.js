@@ -40,9 +40,11 @@ function Cards() {
         <div>
             <DivStyle2>
                 <input onChange={(e)=> handleChange(e)} type='text'/>
-                <button onClick={()=> { dispatch(getVideoGameName(name));
-                dispatch(filtrados(gamesNames))}
-                }>Search 🔍</button>
+                <button onClick={() => {
+                    dispatch(getVideoGameName(name));
+                    dispatch(filtrados(gamesNames))
+                }}
+                >Search 🔍</button>
                 <button onClick={() => dispatch(filtrados(games))}>🔄</button>
             </DivStyle2>
 
@@ -95,11 +97,11 @@ function Cards() {
                 })
             }
             </DivStyle>
+            
             <DivStyle2>
             <button onClick={() => prePage()}>Previus</button>
             <button onClick={() => nextPage()}>Next</button>
             </DivStyle2>
-
         </div>
     )
 }
